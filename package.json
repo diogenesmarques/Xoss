@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.2",
+    "@react-native-picker/picker": "2.4.8",
     "expo": "~47.0.6",
     "expo-status-bar": "~1.4.2",
     "react": "18.1.0",
@@ -21,6 +22,10 @@
     "@babel/core": "^7.12.9",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.70.6",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
+    "eslint": "^8.27.0",
+    "eslint-plugin-react": "^7.31.10",
     "typescript": "^4.6.3"
   },
   "private": true

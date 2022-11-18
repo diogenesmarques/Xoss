@@ -15,6 +15,7 @@ export interface ICategoryList {
 }
 
 export interface IExpense {
+    id: number,
     createdAt?: Date,
     categoryId: number,
     amount: number,

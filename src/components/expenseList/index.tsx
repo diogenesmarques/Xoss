@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { ICategoryList, IExpenseList } from '../../utils';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, ScrollView } from 'react-native';
+
+import Expense from './expense'
 
 interface Props {
     expenseList: IExpenseList,
@@ -8,27 +10,15 @@ interface Props {
 }
 
 const ExpenseList: FC<Props> = ({ expenseList, categoryList }) => {
-
-    const expense: FC<any> = ({item}) => {
-
-        const color: string = categoryList.categories.find(cat => cat.id === item.categoryId)?.color ?? 'black';
-
-        return(
-            <View>
-                <Text style={{color}}>{item.amount}</Text>
-            </View>
-        )
-    }
-
     return(
         <View>
-            <FlatList data={expenseList.expenses} renderItem={expense}></FlatList>
+            <ScrollView>
+                {expenseList.expenses.map(exp => {
+                    return <Expense key={exp.id} categoryList={categoryList} expense={exp}></Expense>
+                })}
+            </ScrollView>
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    
-});
 
 export default ExpenseList;

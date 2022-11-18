@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import commonStyles from '../../common/styles';
 import { IShipping } from '../../utils'
 
-const Header: FC<IShipping> = ({ startDate, endDate, value }) => {
+const Header: FC<IShipping> = ({ value }) => {
     return(
         <View style={styles.main}>
             <View style={styles.content}>
@@ -17,10 +17,11 @@ const Header: FC<IShipping> = ({ startDate, endDate, value }) => {
 const styles = StyleSheet.create({
     main: {
         width:'100%',
-        height:'35%',
+        height:40,
         top:0,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        marginBottom:5
     },
     content: {
         margin:'auto',
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     },
     text: {
         ...commonStyles.text,
-        fontSize:40
+        fontSize:24
     }
 });
 

@@ -16,7 +16,7 @@ const Card: FC<Props> = ({children}) => {
 
 const styles = StyleSheet.create({
     main: {
-        backgroundColor:'#D1D1D1',
+        backgroundColor:'#E0E2DB',
         width:'90%',
         padding:'3%',
         borderRadius:5
