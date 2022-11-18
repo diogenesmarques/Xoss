@@ -1,0 +1,25 @@
+export interface IShipping {
+    startDate: Date,
+    endDate?: Date,
+    value: number
+}
+
+export interface ICategory {
+    id: number,
+    name: string,
+    color: string
+}
+
+export interface ICategoryList {
+    categories: ICategory[]
+}
+
+export interface IExpense {
+    createdAt?: Date,
+    categoryId: number,
+    amount: number,
+}
+
+export interface IExpenseList {
+    expenses: IExpense[]
+}

@@ -1,20 +1,57 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
+
+import { ICategoryList, IExpenseList } from './src/utils';
+
+import Card from './src/components/card';
+import Header from './src/components/header';
+import ExpenseList from './src/components/expenseList';
 
 export default function App() {
+
+  const categories: ICategoryList = {
+    categories: [
+      {
+        id:1,
+        color:'red',
+        name:'Gasolina'
+      },
+      {
+        id:2,
+        color:'blue',
+        name:'Alimentação'
+      }
+    ]
+  }
+
+  const expenses: IExpenseList = {
+    expenses: [
+      {
+        amount: 200,
+        categoryId:1
+      },
+      {
+        amount:400,
+        categoryId:2
+      }
+    ]
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
+    <SafeAreaView>
+      <Header startDate={new Date()} value={2000} />
+      <View style={styles.body}>
+        <Card>
+          <ExpenseList expenseList={expenses} categoryList={categories}/>
+        </Card>
+      </View>
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  body: {
+    alignItems:'center'
+  }
+})
