@@ -68,9 +68,9 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
+      <Header startDate={new Date()} value={shipping} />
       <ScrollView>
         <View>
-          <Header startDate={new Date()} value={shipping} />
           <View style={styles.body}>
             <Card>
               <ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>

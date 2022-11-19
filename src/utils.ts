@@ -24,3 +24,9 @@ export interface IExpense {
 export interface IExpenseList {
     expenses: IExpense[]
 }
+
+export interface IMenuOption {
+    id: number,
+    label: string,
+    action: () => void
+}
