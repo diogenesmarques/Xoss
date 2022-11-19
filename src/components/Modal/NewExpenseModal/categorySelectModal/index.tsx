@@ -15,7 +15,7 @@ const CategorySelectModal: FC<Props> = ({ categoryList, setCategory, toggleSelec
         <View style={styles.modalBody}>
             <ScrollView>
                 {categoryList.categories.map(cat => {
-                    return <CategoryItem category={cat} setCategory={setCategory} toggleSelect={toggleSelect} /> 
+                    return <CategoryItem key={cat.id} category={cat} setCategory={setCategory} toggleSelect={toggleSelect} /> 
                 })}
                 
             </ScrollView>

@@ -1,14 +1,38 @@
-import { FC } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { StyleSheet, View, Pressable, Text } from 'react-native';
 
 interface Props {
-    toggleModal: () => void
+    toggleModal: () => void,
+    balance: number,
+    shipping: number
 }
 
-const Footer: FC<Props> = ({toggleModal}) => {
+const Footer: FC<Props> = ({toggleModal, balance, shipping}) => {
+
+    const calcPercentage: (part:number, total:number) => number = (part, total) => (100 * part) / total;
+
+    const [balanceColor, setBalanceColor] = useState<string>('#000');
+    const [balancePercentage, setBalancePercentage] = useState<number>(0);
+
+    useEffect(() => {
+        if (balance > 0) setBalanceColor('darkgreen');
+        if (balance === 0) setBalanceColor('#000');
+        if (balance < 0) setBalanceColor('darkred');
+
+        const newBalancePercentage = calcPercentage(balance, shipping);
+        setBalancePercentage(newBalancePercentage);
+    }, [balance]);
 
     return (
         <View style={styles.footer}>
+            <View style={styles.balanceContainer}>
+                <Text style={{...styles.balanceText, color:balanceColor}}>
+                    Saldo:
+                </Text>
+                <Text style={{...styles.balanceText, color:balanceColor}}>
+                    R${(balance.toFixed(2)).replace('.', ',')} ({(balancePercentage.toFixed(1)).replace('.', ',')}%)
+                </Text>
+            </View>
             <Pressable style={styles.button} onPress={toggleModal}>
                 <Text style={styles.buttonText}>Nova despesa</Text>
             </Pressable>
@@ -16,30 +40,39 @@ const Footer: FC<Props> = ({toggleModal}) => {
     );
 }
 
-
-
 const styles = StyleSheet.create({
     footer: {
-        backgroundColor:'#f2f2f2',
         width:'100%',
-        height:70,
+        height:90,
         bottom:0,
         justifyContent:'center',
         alignItems:'center',
         paddingVertical:5,
-        paddingHorizontal:10
+        paddingHorizontal:20
     },
     button: {
         backgroundColor:'purple',
-        height:'90%',
-        width:'90%',
+        height:'70%',
+        width:'100%',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:5
     },
     buttonText: {
         color:'#f2f2f2',
-        fontSize:24
+        fontSize:24,
+        fontWeight:'300'
+    },
+    balanceContainer: {
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        width:'100%',
+        paddingVertical:5
+    },
+    balanceText: {
+        fontSize:24,
+        fontWeight:'300'
     }
 })
 

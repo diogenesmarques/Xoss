@@ -2,7 +2,8 @@ import { StyleSheet } from "react-native";
 
 const commonStyles = StyleSheet.create({
     text: {
-        color:'#252525'
+        color:'#252525',
+        fontWeight:'300'
     }
 });
 

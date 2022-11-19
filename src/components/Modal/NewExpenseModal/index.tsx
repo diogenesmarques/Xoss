@@ -1,39 +1,54 @@
 import { FC, useState, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import ModalTemplate from '..';
-import { ICategoryList } from '../../../utils';
+import { ICategoryList, ICategory } from '../../../utils';
 import CategorySelectModal from './categorySelectModal';
 
 interface Props {
-    categoryList: ICategoryList
+    categoryList: ICategoryList,
+    createExpense: (value:number, categoryId:number) => void,
+    toggleModal: () => void
 }
 
-const NewExpenseModal: FC<Props> = ({ categoryList }) => {
+const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }) => {
 
-    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
+    const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [categorySelectModalVisibility, setCategorySelectModalVisibility] = useState<boolean>(false);    
-    const [selectedCategoryColor, setSelectedCategoryColor] = useState<string | null>(null)
+    const [selectedCategoryColor, setSelectedCategoryColor] = useState<string | null>(null);
+    const [expenseAmount, setExpenseAmount] = useState<string | null>(null);
 
     useEffect(() => {
         if(selectedCategoryId === null) return;
 
-        
+        const selectedCategory: ICategory | null = categoryList.categories.find(cat => cat.id === selectedCategoryId) ?? null;
+        if (selectedCategory) setSelectedCategoryColor(selectedCategory.color);
 
-    }, [selectedCategoryId])
+    }, [selectedCategoryId]);
 
     const toggleSelect: () => void = () => setCategorySelectModalVisibility(!categorySelectModalVisibility);
 
+    const handleClick: (value:string | null, categoryId:number | null) => void = (value, categoryId) => {
+        if (value === null || categoryId === null) return;
+
+        createExpense(parseFloat(value), categoryId);
+        toggleModal();
+    }
 
     return(
         <View>
             <ScrollView contentContainerStyle={styles.modalBody}>
 
-                <TextInput style={styles.valueInput} placeholder='Valor da despesa...' keyboardType='numeric'/>                
+                <TextInput 
+                    style={styles.valueInput} 
+                    placeholder='Valor da despesa...' 
+                    keyboardType='numeric'
+                    onChangeText={value => setExpenseAmount(value)}
+                />                
 
                 <TextInput 
                     value={categoryList.categories.find(cat => cat.id === selectedCategoryId)?.name ?? ''} 
-                    onPressIn={toggleSelect} 
-                    style={{...styles.valueInput}} 
+                    onPressIn={toggleSelect}
+                    style={{...styles.valueInput, borderBottomColor:selectedCategoryColor ?? '#F2F2F2'}} 
                     placeholder='Selecione a categoria...' 
                     editable={false}
                 />
@@ -41,7 +56,7 @@ const NewExpenseModal: FC<Props> = ({ categoryList }) => {
             </ScrollView>
             
             <View style={styles.modalFooter}>
-                <Pressable style={styles.createButton}>
+                <Pressable onPress={() => handleClick(expenseAmount, selectedCategoryId)} style={styles.createButton}>
                     <Text style={styles.createButtonText} >Criar despesa</Text>
                 </Pressable>
             </View>

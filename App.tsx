@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View, ScrollView, Modal, Text } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { ICategoryList, IExpenseList } from './src/utils';
 
@@ -13,7 +13,7 @@ import NewExpenseModal from './src/components/Modal/NewExpenseModal';
 
 export default function App() {
   
-  const categories: ICategoryList = {
+  const [categories, setCategories] = useState<ICategoryList>({
     categories: [
       {
         id:1,
@@ -26,9 +26,8 @@ export default function App() {
         name:'Alimentação'
       }
     ]
-  }
-  
-  const expenses: IExpenseList = {
+  });
+  const [expenses, setExpenses] = useState<IExpenseList>({
     expenses: [
       {
         id:1,
@@ -39,40 +38,59 @@ export default function App() {
         id:2,
         amount:400,
         categoryId:2
+      },
+      {
+        id:3,
+        amount:300,
+        categoryId:1
       }
     ]
-  }
-
+  });
+  const [balance, setBalance] = useState<number>(0);
+  const [shipping, setShipping] = useState<number>(2000);
   const [newExpenseModalVisibility, setNewExpenseModalVisibility] = useState<boolean>(false);
 
+  useEffect(() => {
+    const newBalance: number = shipping - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
+    setBalance(newBalance);
+  }, [expenses.expenses.length, shipping]);
+
   const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
+  const createExpense: (value:number, categoryId:number) => void = (value, categoryId) => {
+    expenses.expenses.push({
+      id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
+      amount: value,
+      categoryId,
+      createdAt: new Date()
+    });
+  }
   
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <ScrollView>
         <View>
-          <Header startDate={new Date()} value={2000} />
+          <Header startDate={new Date()} value={shipping} />
           <View style={styles.body}>
             <Card>
-              <ExpenseList expenseList={expenses} categoryList={categories}/>
+              <ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>
             </Card>
           </View>
         </View>
         <Modal 
-          visible={newExpenseModalVisibility} 
+          visible={newExpenseModalVisibility}
           animationType='fade' 
           transparent={true} 
-          onRequestClose={toggleModal}          
+          onRequestClose={toggleModal}
         >
           <ModalTemplate toggleModal={toggleModal}> 
-            <NewExpenseModal categoryList={categories}/>
+            <NewExpenseModal categoryList={categories} createExpense={createExpense} toggleModal={toggleModal} />
           </ModalTemplate>
         </Modal>
       </ScrollView>
 
       <View>
-        <Footer toggleModal={toggleModal}/>
+        <Footer toggleModal={toggleModal} balance={balance} shipping={shipping} />
       </View>
     </SafeAreaView>
     );
