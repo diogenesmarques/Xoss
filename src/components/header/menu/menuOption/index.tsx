@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Text } from 'react-native';
+import { Text, StyleSheet, Pressable } from 'react-native';
 import { IMenuOption } from '../../../../utils';
 
 interface Props {
@@ -8,11 +8,24 @@ interface Props {
 
 const MenuOption: FC<Props> = ({ option }) => {
 
-    const { id, label, action } = option;
+    const { label, action } = option;
 
     return(
-        <Text>{id} - {label}</Text>
+        <Pressable style={styles.optionContainer} onPress={action}>
+                <Text style={styles.option}>{label}</Text>
+        </Pressable>
     );
 }
+
+const styles = StyleSheet.create({
+    optionContainer: {
+        borderBottomWidth:1,
+        borderBottomColor:'#F2F2F2',
+        paddingVertical:15
+    },
+    option: {
+        fontWeight:'300'
+    }
+});
 
 export default MenuOption;

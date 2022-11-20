@@ -4,7 +4,14 @@ import commonStyles from '../../common/styles';
 import { IShipping } from '../../utils'
 import Menu from './menu';
 
-const Header: FC<IShipping> = ({ value }) => {
+interface Props {
+    shipping: IShipping,
+    newShipping: (value: number) => void
+}
+
+const Header: FC<Props> = ({ shipping, newShipping }) => {
+
+    const { value } = shipping;
 
     const [showMenu, setShowMenu] = useState<boolean>(false);
 
@@ -17,7 +24,7 @@ const Header: FC<IShipping> = ({ value }) => {
                     <View style={styles.hambButton}></View>
                     <View style={styles.hambButton}></View>
                     <View style={styles.hambButton}></View>
-                </Pressable>                
+                </Pressable>
             </View>
             <View style={styles.content}>
                 <Text style={styles.text}>Frete:</Text>
@@ -26,11 +33,11 @@ const Header: FC<IShipping> = ({ value }) => {
 
             <Modal          
                 visible={showMenu}
-                animationType='slide' 
-                transparent={false} 
+                animationType='fade' 
+                transparent={true} 
                 onRequestClose={toggleMenu}
             >
-                <Menu/>
+                <Menu toggleMenu={toggleMenu} showMenu={showMenu} newShipping={newShipping}/>
             </Modal>
 
         </View>
@@ -75,7 +82,7 @@ const styles = StyleSheet.create({
         height:'50%'
     },
     hambButton: {
-        height:3,
+        height:2,
         width:23,
         backgroundColor:'purple',
     }

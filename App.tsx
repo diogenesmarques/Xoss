@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View, ScrollView, Modal, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 
-import { ICategoryList, IExpenseList } from './src/utils';
+import { ICategoryList, IExpenseList, IShipping } from './src/utils';
 
 import Card from './src/components/card';
 import Header from './src/components/header';
@@ -47,15 +47,12 @@ export default function App() {
     ]
   });
   const [balance, setBalance] = useState<number>(0);
-  const [shipping, setShipping] = useState<number>(2000);
+  const [shipping, setShipping] = useState<IShipping>({value:2000, startDate: new Date()});
   const [newExpenseModalVisibility, setNewExpenseModalVisibility] = useState<boolean>(false);
-
   useEffect(() => {
-    const newBalance: number = shipping - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
+    const newBalance: number = shipping.value - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
     setBalance(newBalance);
   }, [expenses.expenses.length, shipping]);
-
-  const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
   const createExpense: (value:number, categoryId:number) => void = (value, categoryId) => {
     expenses.expenses.push({
       id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
@@ -64,17 +61,25 @@ export default function App() {
       createdAt: new Date()
     });
   }
+
+  const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
+  const newShipping: (value: number) => void = (value) => {
+    if (value < 0 || !value) return;
+
+    setShipping({value, startDate:new Date()});
+    expenses.expenses = [];
+  }
   
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Header startDate={new Date()} value={shipping} />
+      <Header shipping={shipping} newShipping={newShipping}/>
       <ScrollView>
         <View>
           <View style={styles.body}>
-            <Card>
-              <ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>
-            </Card>
+            {expenses.expenses.length > 0 ? <Card>
+              <ExpenseList shipping={shipping.value} expenseList={expenses} categoryList={categories}/>
+            </Card> : <></>}
           </View>
         </View>
         <Modal 
@@ -88,9 +93,8 @@ export default function App() {
           </ModalTemplate>
         </Modal>
       </ScrollView>
-
       <View>
-        <Footer toggleModal={toggleModal} balance={balance} shipping={shipping} />
+        <Footer toggleModal={toggleModal} balance={balance} shipping={shipping.value} />
       </View>
     </SafeAreaView>
     );
