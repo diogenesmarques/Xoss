@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import commonStyles from '../../../../../common/styles';
 import { ICategory } from '../../../../../utils';
 
 interface Props {
@@ -19,7 +20,7 @@ const CategoryItem: FC<Props> = ({category, setCategory, toggleSelect}) => {
 
     return(
         <Pressable onPress={() => handleClick(id)} style={{...styles.item, borderLeftColor:color}}>
-            <Text>{name}</Text>
+            <Text style={commonStyles.text}>{name}</Text>
         </Pressable>
     )
 }
@@ -27,9 +28,11 @@ const CategoryItem: FC<Props> = ({category, setCategory, toggleSelect}) => {
 const styles = StyleSheet.create({
     item: {
         paddingVertical:15,
-        paddingLeft:5,
-        borderRadius:5,
-        borderLeftWidth:2        
+        borderBottomWidth:1,
+        borderBottomColor:'#F2F2F2',
+        borderLeftWidth:3,
+        paddingLeft:10,
+        borderRadius:5
     }
 });
 

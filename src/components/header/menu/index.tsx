@@ -1,18 +1,20 @@
 import { FC, useEffect, useState, useRef } from 'react';
 import { SafeAreaView, Pressable, StyleSheet, View, GestureResponderEvent, Animated, Modal, ScrollView, Text } from 'react-native'
-import { IMenuOption } from '../../../utils';
+import { ICategoryList, IMenuOption } from '../../../utils';
 import ModalTemplate from '../../Modal';
 import MenuOption from './menuOption';
 import NewShippingModal from './newShippingModal';
+import CategoriesModal from './categoriesModal'
+
 interface Props {
     toggleMenu: () => void,
-    showMenu: boolean,
-    newShipping: (value: number) => void
+    newShipping: (value: number) => void,
+    categories: ICategoryList
 }
 
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
-const Menu: FC<Props> = ({toggleMenu, showMenu, newShipping}) => {
+const Menu: FC<Props> = ({toggleMenu, newShipping, categories}) => {
 
     const slideAnim = useRef(new Animated.Value(500)).current;
     const slideInAnim = Animated.timing(slideAnim, { toValue:0, duration:300, useNativeDriver: true });
@@ -36,14 +38,12 @@ const Menu: FC<Props> = ({toggleMenu, showMenu, newShipping}) => {
         {
             id:2,
             label:'Gerenciar categorias',
-            action:() => {}
+            action:() => toggleCategoriesModal()
         }
     ];
 
     const [showNewShippingModal, setShowNewShippingModal] = useState<boolean>(false);
-
     const toggleShippingModal: () => void = () => setShowNewShippingModal(!showNewShippingModal);
-
     const handleCreateNewShipping: (value: number) => void = (value) => {
         if (value <= 0 || !value) return;
 
@@ -53,6 +53,9 @@ const Menu: FC<Props> = ({toggleMenu, showMenu, newShipping}) => {
         slideOutAnim.start();
         setTimeout(toggleMenu, 300);
     }
+
+    const [showCategoriesModal, setShowCategoriesModal] = useState<boolean>(false);
+    const toggleCategoriesModal: () => void = () => setShowCategoriesModal(!showCategoriesModal);
 
     return(
         <>
@@ -74,8 +77,18 @@ const Menu: FC<Props> = ({toggleMenu, showMenu, newShipping}) => {
             >
                 <ModalTemplate toggleModal={toggleShippingModal}>
                     <NewShippingModal createShipping={handleCreateNewShipping}/>
-                </ModalTemplate>                   
+                </ModalTemplate>
             </Modal>
+
+            <Modal
+                visible={showCategoriesModal}
+                animationType='slide'
+                transparent={false} 
+                onRequestClose={toggleShippingModal}
+            >
+                <CategoriesModal categories={categories} toggleModal={toggleCategoriesModal}/>
+            </Modal>
+
         </>
     )
 }

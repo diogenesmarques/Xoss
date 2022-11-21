@@ -1,15 +1,16 @@
 import { FC, useState } from 'react';
 import { View, StyleSheet, Text, Pressable, Modal } from 'react-native';
 import commonStyles from '../../common/styles';
-import { IShipping } from '../../utils'
+import { ICategoryList, IShipping } from '../../utils'
 import Menu from './menu';
 
 interface Props {
     shipping: IShipping,
-    newShipping: (value: number) => void
+    newShipping: (value: number) => void,
+    categories: ICategoryList
 }
 
-const Header: FC<Props> = ({ shipping, newShipping }) => {
+const Header: FC<Props> = ({ shipping, newShipping, categories }) => {
 
     const { value } = shipping;
 
@@ -37,7 +38,7 @@ const Header: FC<Props> = ({ shipping, newShipping }) => {
                 transparent={true} 
                 onRequestClose={toggleMenu}
             >
-                <Menu toggleMenu={toggleMenu} showMenu={showMenu} newShipping={newShipping}/>
+                <Menu toggleMenu={toggleMenu} newShipping={newShipping} categories={categories}/>
             </Modal>
 
         </View>

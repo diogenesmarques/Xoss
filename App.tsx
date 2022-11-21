@@ -73,7 +73,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Header shipping={shipping} newShipping={newShipping}/>
+      <Header categories={categories} shipping={shipping} newShipping={newShipping}/>
       <ScrollView>
         <View>
           <View style={styles.body}>

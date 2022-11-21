@@ -17,7 +17,6 @@ const CategorySelectModal: FC<Props> = ({ categoryList, setCategory, toggleSelec
                 {categoryList.categories.map(cat => {
                     return <CategoryItem key={cat.id} category={cat} setCategory={setCategory} toggleSelect={toggleSelect} /> 
                 })}
-                
             </ScrollView>
         </View>
     );
@@ -25,7 +24,8 @@ const CategorySelectModal: FC<Props> = ({ categoryList, setCategory, toggleSelec
 
 const styles = StyleSheet.create({
     modalBody: {
-        padding:10
+        padding:10,
+        minHeight:250
     }
 });
 
