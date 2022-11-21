@@ -1,14 +1,35 @@
-import { FC } from 'react';
-import { Text, SafeAreaView, View, StyleSheet, Pressable, ScrollView } from 'react-native';
+import { FC, useState } from 'react';
+import { Text, SafeAreaView, View, StyleSheet, Pressable, ScrollView, Modal } from 'react-native';
 import commonStyles from '../../../../common/styles';
-import { ICategoryList } from '../../../../utils';
+import { ICategory, ICategoryList } from '../../../../utils';
+import ModalTemplate from '../../../Modal';
+import EditCategoryModal from './editCategoryModal';
 
 interface Props {
     toggleModal: () => void,
-    categories: ICategoryList
+    categories: ICategoryList,
+    createCategory: (name: string) => void,
+    editCategoryName: (category: ICategory, name: string) => void,
+    deleteCategory: (category: ICategory) => void
 }
 
-const CategoriesModal: FC<Props> = ({ toggleModal, categories }) => {
+const CategoriesModal: FC<Props> = ({ toggleModal, categories, createCategory, editCategoryName, deleteCategory }) => {
+
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const toggleEditModal: () => void = () => setShowEditModal(!showEditModal);
+
+    const [category, setCategory] = useState<ICategory | null>(null);
+
+    const handleCategoryClick: (cat: ICategory) => void = (cat) => {
+        setCategory(cat);
+        toggleEditModal();
+    }
+
+    const handleButtonClick: () => void = () => {
+        setCategory(null);
+        toggleEditModal();
+    }
+
     return(
         <SafeAreaView style={styles.container}>
 
@@ -20,17 +41,28 @@ const CategoriesModal: FC<Props> = ({ toggleModal, categories }) => {
 
             <ScrollView style={styles.body}>
                 {categories.categories.map(cat => (
-                    <Pressable style={{...styles.category, borderLeftColor:cat.color}}>
+                    <Pressable key={cat.id} onPress={() => handleCategoryClick(cat)} style={{...styles.category, borderLeftColor:cat.color}}>
                         <Text style={commonStyles.text}>{cat.name}</Text>
                     </Pressable>
                 ))}
             </ScrollView>
 
             <View style={styles.modalFooter}>
-                <Pressable style={styles.footerButton}>
+                <Pressable style={styles.footerButton} onPress={handleButtonClick}>
                     <Text style={styles.footerButtonText}>Nova categoria</Text>
                 </Pressable>
             </View>
+
+            <Modal
+                visible={showEditModal}
+                animationType='fade' 
+                transparent={true} 
+                onRequestClose={toggleEditModal}
+            >
+                <ModalTemplate toggleModal={toggleEditModal}>
+                    <EditCategoryModal createCategory={createCategory} toggleModal={toggleEditModal} category={category} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
+                </ModalTemplate>
+            </Modal>
 
         </SafeAreaView>
     );

@@ -1,16 +1,19 @@
 import { FC, useState } from 'react';
 import { View, StyleSheet, Text, Pressable, Modal } from 'react-native';
 import commonStyles from '../../common/styles';
-import { ICategoryList, IShipping } from '../../utils'
+import { ICategory, ICategoryList, IShipping } from '../../utils'
 import Menu from './menu';
 
 interface Props {
     shipping: IShipping,
     newShipping: (value: number) => void,
-    categories: ICategoryList
+    categories: ICategoryList,
+    createCategory: (name: string) => void,
+    editCategoryName: (category: ICategory, name: string) => void,
+    deleteCategory: (category: ICategory) => void
 }
 
-const Header: FC<Props> = ({ shipping, newShipping, categories }) => {
+const Header: FC<Props> = ({ shipping, newShipping, categories, createCategory, editCategoryName, deleteCategory }) => {
 
     const { value } = shipping;
 
@@ -38,7 +41,7 @@ const Header: FC<Props> = ({ shipping, newShipping, categories }) => {
                 transparent={true} 
                 onRequestClose={toggleMenu}
             >
-                <Menu toggleMenu={toggleMenu} newShipping={newShipping} categories={categories}/>
+                <Menu toggleMenu={toggleMenu} newShipping={newShipping} categories={categories} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
             </Modal>
 
         </View>

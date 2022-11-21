@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView, StyleSheet, View, ScrollView, Modal, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 
-import { ICategoryList, IExpenseList, IShipping } from './src/utils';
+import { ICategory, ICategoryList, IExpenseList, IShipping } from './src/utils';
 
 import Card from './src/components/card';
 import Header from './src/components/header';
@@ -53,12 +53,41 @@ export default function App() {
     const newBalance: number = shipping.value - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
     setBalance(newBalance);
   }, [expenses.expenses.length, shipping]);
-  const createExpense: (value:number, categoryId:number) => void = (value, categoryId) => {
+
+  const createExpense: (value: number, categoryId: number) => void = (value, categoryId) => {
     expenses.expenses.push({
       id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
       amount: value,
       categoryId,
       createdAt: new Date()
+    });
+  }
+
+  const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+
+  const createCategory: (name: string) => void = (name) => {
+    categories.categories.push({
+      id: categories.categories.length === 0 ? 1 : categories.categories[categories.categories.length - 1].id + 1,
+      name,
+      color:randomColor()
+    });
+  }
+
+  const editCategoryName: (category: ICategory, name: string) => void = (category, name) => {
+    const index = categories.categories.indexOf(category);
+    categories.categories[index].name = name;
+  }
+
+  const deleteCategory: (category: ICategory) => void = (category) => {
+    setCategories(prevState => {
+      return({
+        categories:[...prevState.categories.filter(cat => cat.id !== category.id)]
+      });
+    });
+    setExpenses(prevState => {
+      return({
+        expenses:[...prevState.expenses.filter(exp => exp.categoryId !== category.id)]
+      });
     });
   }
 
@@ -73,7 +102,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <Header categories={categories} shipping={shipping} newShipping={newShipping}/>
+      <Header categories={categories} shipping={shipping} newShipping={newShipping} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
       <ScrollView>
         <View>
           <View style={styles.body}>

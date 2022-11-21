@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, useRef } from 'react';
 import { SafeAreaView, Pressable, StyleSheet, View, GestureResponderEvent, Animated, Modal, ScrollView, Text } from 'react-native'
-import { ICategoryList, IMenuOption } from '../../../utils';
+import { ICategory, ICategoryList, IMenuOption } from '../../../utils';
 import ModalTemplate from '../../Modal';
 import MenuOption from './menuOption';
 import NewShippingModal from './newShippingModal';
@@ -9,12 +9,15 @@ import CategoriesModal from './categoriesModal'
 interface Props {
     toggleMenu: () => void,
     newShipping: (value: number) => void,
-    categories: ICategoryList
+    categories: ICategoryList,
+    createCategory: (name: string) => void,
+    editCategoryName: (category: ICategory, name: string) => void,
+    deleteCategory: (category: ICategory) => void
 }
 
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
-const Menu: FC<Props> = ({toggleMenu, newShipping, categories}) => {
+const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, editCategoryName, deleteCategory}) => {
 
     const slideAnim = useRef(new Animated.Value(500)).current;
     const slideInAnim = Animated.timing(slideAnim, { toValue:0, duration:300, useNativeDriver: true });
@@ -86,7 +89,7 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories}) => {
                 transparent={false} 
                 onRequestClose={toggleShippingModal}
             >
-                <CategoriesModal categories={categories} toggleModal={toggleCategoriesModal}/>
+                <CategoriesModal categories={categories} toggleModal={toggleCategoriesModal} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
             </Modal>
 
         </>
@@ -107,6 +110,6 @@ const styles = StyleSheet.create({
     menuContainer: {
         paddingHorizontal:20
     }
-})
+});
 
 export default Menu;
