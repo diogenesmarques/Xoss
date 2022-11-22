@@ -1,5 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, ScrollView, Modal, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, ScrollView, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { ICategory, ICategoryList, IExpenseList, IShipping } from './src/utils';
@@ -12,6 +14,24 @@ import ModalTemplate from './src/components/Modal';
 import NewExpenseModal from './src/components/Modal/NewExpenseModal';
 
 export default function App() {
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData: () => void = async () => {
+    const categories: string | null = await AsyncStorage.getItem('categories');
+    if (!categories) setCategories({categories:[]});
+    else setCategories({categories:JSON.parse(categories)});
+
+    const expenses: string | null = await AsyncStorage.getItem('expenses');
+    if (!expenses) setExpenses({expenses:[]});
+    else setExpenses({expenses:JSON.parse(expenses)});
+
+    const shipping: string | null = await AsyncStorage.getItem('shipping');
+    if (!shipping) setShipping({value:0});
+    else setShipping(JSON.parse(shipping))
+  }
   
   const [categories, setCategories] = useState<ICategoryList>({
     categories: [
@@ -61,6 +81,7 @@ export default function App() {
       categoryId,
       createdAt: new Date()
     });
+    AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
   }
 
   const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
@@ -71,11 +92,13 @@ export default function App() {
       name,
       color:randomColor()
     });
+    AsyncStorage.setItem('categories', JSON.stringify(categories.categories));
   }
 
   const editCategoryName: (category: ICategory, name: string) => void = (category, name) => {
     const index = categories.categories.indexOf(category);
     categories.categories[index].name = name;
+    AsyncStorage.setItem('categories', JSON.stringify(categories.categories));
   }
 
   const deleteCategory: (category: ICategory) => void = (category) => {
@@ -89,6 +112,7 @@ export default function App() {
         expenses:[...prevState.expenses.filter(exp => exp.categoryId !== category.id)]
       });
     });
+    AsyncStorage.setItem('categories', JSON.stringify(categories.categories));
   }
 
   const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
@@ -97,6 +121,8 @@ export default function App() {
 
     setShipping({value, startDate:new Date()});
     expenses.expenses = [];
+    AsyncStorage.setItem('expenses', JSON.stringify([]));
+    AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
   }
   
   return (

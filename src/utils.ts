@@ -1,5 +1,5 @@
 export interface IShipping {
-    startDate: Date,
+    startDate?: Date,
     endDate?: Date,
     value: number
 }
