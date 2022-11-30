@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
         alignItems:'flex-end'
     },
     button: {
-        color:'purple',
+        color:'#A4243B',
         fontSize:48,
         justifyContent:'space-evenly',
         alignItems:'flex-end',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     hambButton: {
         height:2,
         width:23,
-        backgroundColor:'purple',
+        backgroundColor:'#A4243B',
     }
 });
 

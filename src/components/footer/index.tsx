@@ -20,7 +20,7 @@ const Footer: FC<Props> = ({toggleModal, balance, shipping}) => {
         if (balance < 0) setBalanceColor('darkred');
 
         const newBalancePercentage = calcPercentage(balance, shipping);
-        setBalancePercentage(newBalancePercentage);
+        setBalancePercentage(isNaN(newBalancePercentage) ? 0 : newBalancePercentage);
     }, [balance]);
 
     return (
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     button: {
-        backgroundColor:'purple',
+        backgroundColor:'#A4243B',
         height:'70%',
         width:'100%',
         justifyContent:'center',

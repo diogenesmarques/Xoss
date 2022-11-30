@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     button: {
-        backgroundColor:'purple',
+        backgroundColor:'#A4243B',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:5,

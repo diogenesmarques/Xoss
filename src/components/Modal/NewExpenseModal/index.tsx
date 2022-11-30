@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
         padding:10
     },
     createButton: {
-        backgroundColor:'purple',
+        backgroundColor:'#A4243B',
         height:'80%',
         width:'100%',
         justifyContent:'center',

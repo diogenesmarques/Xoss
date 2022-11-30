@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     closeButtonText: {
         ...commonStyles.text,
         fontSize:32,
-        color:'purple'
+        color:'#A4243B'
     },
     body: {
         paddingHorizontal:25
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     footerButton: {
-        backgroundColor:'purple',
+        backgroundColor:'#A4243B',
         height:'70%',
         width:'100%',
         justifyContent:'center',
