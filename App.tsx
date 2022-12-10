@@ -21,21 +21,7 @@ export default function App() {
 
   const fetchData: () => void = async () => {
     const categories: string | null = await AsyncStorage.getItem('categories');
-    if (!categories) setCategories({categories:[]});
-    else setCategories({categories:JSON.parse(categories)});
-
-    const expenses: string | null = await AsyncStorage.getItem('expenses');
-    if (!expenses) setExpenses({expenses:[]});
-    else setExpenses({expenses:JSON.parse(expenses)});
-
-    const shipping: string | null = await AsyncStorage.getItem('shipping');
-    if (!shipping) setShipping({value:0});
-    else setShipping(JSON.parse(shipping))
-  }
-  
-  const [categories, setCategories] = useState<ICategoryList>({
-    categories: [
-      {
+    if (!categories) setCategories({categories:[{
         id:1,
         color:'red',
         name:'Gasolina'
@@ -44,28 +30,21 @@ export default function App() {
         id:2,
         color:'blue',
         name:'Alimentação'
-      }
-    ]
-  });
-  const [expenses, setExpenses] = useState<IExpenseList>({
-    expenses: [
-      {
-        id:1,
-        amount: 200,
-        categoryId:1
-      },
-      {
-        id:2,
-        amount:400,
-        categoryId:2
-      },
-      {
-        id:3,
-        amount:300,
-        categoryId:1
-      }
-    ]
-  });
+      }]});
+    else setCategories({categories:JSON.parse(categories)});
+
+    const expenses: string | null = await AsyncStorage.getItem('expenses');
+    if (!expenses) setExpenses({expenses:[]});
+    else setExpenses({expenses:JSON.parse(expenses)});
+
+    const shipping: string | null = await AsyncStorage.getItem('shipping');
+    if (!shipping) setShipping({value:0});
+    else setShipping(JSON.parse(shipping));
+  }
+  
+  const [categories, setCategories] = useState<ICategoryList>({categories: []});
+  const [expenses, setExpenses] = useState<IExpenseList>({expenses: []});
+
   const [balance, setBalance] = useState<number>(0);
   const [shipping, setShipping] = useState<IShipping>({value:2000, startDate: new Date()});
   const [newExpenseModalVisibility, setNewExpenseModalVisibility] = useState<boolean>(false);
