@@ -23,14 +23,20 @@ export default function App() {
     const categories: string | null = await AsyncStorage.getItem('categories');
     if (!categories) setCategories({categories:[{
         id:1,
-        color:'red',
+        color:'yellow',
         name:'Gasolina'
       },
       {
         id:2,
-        color:'blue',
+        color:'green',
         name:'Alimentação'
-      }]});
+      },
+      {
+        id:3,
+        color:'aqua',
+        name:'Pedágio'
+      },
+    ]});
     else setCategories({categories:JSON.parse(categories)});
 
     const expenses: string | null = await AsyncStorage.getItem('expenses');
