@@ -1,5 +1,6 @@
 export interface IShipping {
-    startDate?: Date,
+    id: number,
+    startDate: Date,
     endDate?: Date,
     value: number
 }
@@ -19,6 +20,7 @@ export interface IExpense {
     createdAt?: Date,
     categoryId: number,
     amount: number,
+    shippingId: number
 }
 
 export interface IExpenseList {

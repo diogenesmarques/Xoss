@@ -47,29 +47,27 @@ export default function App() {
     if (!shipping) setShipping({value:0});
     else setShipping(JSON.parse(shipping));
   }
-  
-  const [categories, setCategories] = useState<ICategoryList>({categories: []});
-  const [expenses, setExpenses] = useState<IExpenseList>({expenses: []});
 
-  const [balance, setBalance] = useState<number>(0);
+  // -x-x-x- SHIPPING -x-x-x- //
+
+  const [pastShippings, setPastShippings] = useState<IShipping[]>([]);
+
   const [shipping, setShipping] = useState<IShipping>({value:2000, startDate: new Date()});
-  const [newExpenseModalVisibility, setNewExpenseModalVisibility] = useState<boolean>(false);
-  useEffect(() => {
-    const newBalance: number = shipping.value - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
-    setBalance(newBalance);
-  }, [expenses.expenses.length, shipping]);
+  
+  const newShipping: (value: number) => void = (value) => {
+    if (value < 0 || !value) return;
 
-  const createExpense: (value: number, categoryId: number) => void = (value, categoryId) => {
-    expenses.expenses.push({
-      id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
-      amount: value,
-      categoryId,
-      createdAt: new Date()
-    });
-    AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
+    setShipping({value, startDate:new Date()});
+    expenses.expenses = [];
+    AsyncStorage.setItem('expenses', JSON.stringify([]));
+    AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
   }
 
-  const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+  // -x-x-x- SHIPPING END -x-x-x- //
+
+  // -x-x-x- CATEGORIES -x-x-x- //
+
+  const [categories, setCategories] = useState<ICategoryList>({categories: []});
 
   const createCategory: (name: string) => void = (name) => {
     categories.categories.push({
@@ -100,16 +98,38 @@ export default function App() {
     AsyncStorage.setItem('categories', JSON.stringify(categories.categories));
   }
 
-  const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
-  const newShipping: (value: number) => void = (value) => {
-    if (value < 0 || !value) return;
+  // -x-x-x- CATEGORIES END -x-x-x- //
 
-    setShipping({value, startDate:new Date()});
-    expenses.expenses = [];
-    AsyncStorage.setItem('expenses', JSON.stringify([]));
-    AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
-  }
+  // -x-x-x- EXPENSES -x-x-x- //
   
+  const [expenses, setExpenses] = useState<IExpenseList>({expenses: []});
+  const createExpense: (value: number, categoryId: number) => void = (value, categoryId) => {
+    expenses.expenses.push({
+      id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
+      amount: value,
+      categoryId,
+      createdAt: new Date()
+    });
+    AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
+  }
+
+  // -x-x-x- EXPENSES END -x-x-x- //
+
+  // -x-x-x- BALANCE -x-x-x- //
+  
+  const [balance, setBalance] = useState<number>(0);
+  useEffect(() => {
+    const newBalance: number = shipping.value - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
+    setBalance(newBalance);
+  }, [expenses.expenses.length, shipping]);
+
+  // -x-x-x- BALANCE END -x-x-x- //
+
+  const [newExpenseModalVisibility, setNewExpenseModalVisibility] = useState<boolean>(false);
+
+  const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
+  const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
+    
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
