@@ -1,7 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import ModalTemplate from '..';
-import { ICategoryList, ICategory } from '../../../utils';
+import { ICategoryList, ICategory, moneyMask } from '../../../utils';
 import CategorySelectModal from './categorySelectModal';
 
 interface Props {
@@ -15,7 +15,7 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [categorySelectModalVisibility, setCategorySelectModalVisibility] = useState<boolean>(false);    
     const [selectedCategoryColor, setSelectedCategoryColor] = useState<string | null>(null);
-    const [expenseAmount, setExpenseAmount] = useState<string | null>(null);
+    const [expenseAmount, setExpenseAmount] = useState<string>('0');
 
     useEffect(() => {
         if(selectedCategoryId === null) return;
@@ -25,12 +25,18 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
 
     }, [selectedCategoryId]);
 
+    //teste
+    useEffect(() => {
+      console.log(expenseAmount)
+    }, [expenseAmount]);
+
     const toggleSelect: () => void = () => setCategorySelectModalVisibility(!categorySelectModalVisibility);
 
     const handleClick: (value:string | null, categoryId:number | null) => void = (value, categoryId) => {
         if (value === null || categoryId === null) return;
+        console.log(value);
 
-        createExpense(parseFloat(value), categoryId);
+        createExpense(parseFloat(value.substring(3).replace(',', '.')), categoryId);
         toggleModal();
     }
 
@@ -40,10 +46,10 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
 
                 <TextInput 
                     style={styles.valueInput} 
-                    placeholder='Valor da despesa...' 
                     keyboardType='numeric'
+                    value={moneyMask(expenseAmount)}
                     onChangeText={value => setExpenseAmount(value)}
-                />                
+                />
 
                 <TextInput 
                     value={categoryList.categories.find(cat => cat.id === selectedCategoryId)?.name ?? ''} 
