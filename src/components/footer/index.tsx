@@ -9,7 +9,10 @@ interface Props {
 
 const Footer: FC<Props> = ({toggleModal, balance, shipping}) => {
 
-    const calcPercentage: (part:number, total:number) => number = (part, total) => (100 * part) / total;
+    const calcPercentage: (part:number, total:number) => number = (part, total) => {
+      if (total === 0) return 100;
+      return (100 * part) / total;
+    } 
 
     const [balanceColor, setBalanceColor] = useState<string>('#000');
     const [balancePercentage, setBalancePercentage] = useState<number>(0);

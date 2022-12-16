@@ -12,7 +12,11 @@ interface Props {
 
 const ExpenseList: FC<Props> = ({ expenseList, categoryList, shipping }) => {
 
-    const calcPercentage: (part: number, total: number) => number = (part, total) => (100 * part) / total
+    const calcPercentage: (part: number, total: number) => number = (part, total) => {
+      if (total === 0) return 100;
+
+      return (100 * part) / total;
+    }
 
     const [total, setTotal] = useState<number>(0);
     const [totalPercentage, setTotalPercentage] = useState<number>(0);
@@ -24,6 +28,10 @@ const ExpenseList: FC<Props> = ({ expenseList, categoryList, shipping }) => {
         setTotal(newTotal);
         setTotalPercentage(newPercentage);
     }, [expenseList.expenses.length, shipping]);
+
+    useEffect(() => {
+      console.log(1, calcPercentage(50, 800));
+    }, [])
 
     return(
         <View>
