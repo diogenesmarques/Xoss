@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:5
+        borderRadius:3
     },
     createButtonText: {
         color:'#F2F2F2'

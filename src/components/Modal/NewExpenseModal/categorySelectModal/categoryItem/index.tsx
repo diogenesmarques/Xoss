@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         borderBottomColor:'#F2F2F2',
         borderLeftWidth:3,
         paddingLeft:10,
-        borderRadius:5
+        borderRadius:3
     }
 });
 

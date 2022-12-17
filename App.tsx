@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, View, ScrollView, Modal } from 'react-native';
+import { SafeAreaView, StyleSheet, View, ScrollView, Modal, Text, Pressable } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { ICategory, ICategoryList, IExpenseList, IShipping } from './src/utils';
@@ -12,6 +12,7 @@ import ExpenseList from './src/components/expenseList';
 import Footer from './src/components/footer';
 import ModalTemplate from './src/components/Modal';
 import NewExpenseModal from './src/components/Modal/NewExpenseModal';
+import NewShippingModal from './src/components/header/menu/newShippingModal';
 
 export default function App() {
 
@@ -44,7 +45,7 @@ export default function App() {
     else setExpenses({expenses:JSON.parse(expenses)});
 
     const shipping: string | null = await AsyncStorage.getItem('shipping');
-    if (!shipping) setShipping({value:0});
+    if (!shipping) setShipping({value:0, startDate: new Date(), id:getShippingId()});
     else setShipping(JSON.parse(shipping));
   }
 
@@ -52,12 +53,17 @@ export default function App() {
 
   const [pastShippings, setPastShippings] = useState<IShipping[]>([]);
 
-  const [shipping, setShipping] = useState<IShipping>({value:2000, startDate: new Date()});
+  const [shipping, setShipping] = useState<IShipping>({id: 1, value:2000, startDate: new Date()});
   
+  const getShippingId = () => {
+    if (pastShippings.length <= 0) return 1;
+    else return pastShippings[pastShippings.length - 1].id + 1
+  }
+
   const newShipping: (value: number) => void = (value) => {
     if (value < 0 || !value) return;
 
-    setShipping({value, startDate:new Date()});
+    setShipping({id: getShippingId(), value, startDate:new Date()});
     expenses.expenses = [];
     AsyncStorage.setItem('expenses', JSON.stringify([]));
     AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
@@ -108,7 +114,8 @@ export default function App() {
       id: expenses.expenses.length === 0 ? 1 : expenses.expenses[expenses.expenses.length - 1].id + 1,
       amount: value,
       categoryId,
-      createdAt: new Date()
+      createdAt: new Date(),
+      shippingId: shipping.id
     });
     AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
   }
@@ -129,7 +136,42 @@ export default function App() {
 
   const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
   const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
-    
+  
+
+  const [firstShippingModalVisibility, setFirstShippingModalVisibility] = useState<boolean>(false);
+
+  const toggleFirstShippingModalVisibility: () => void = () => setFirstShippingModalVisibility(!firstShippingModalVisibility);
+
+  const createFirstShipping: (value:number) => void = (value) => {
+    if (value <= 0 || !value) return;
+
+    newShipping(value);
+  } 
+
+  if (!shipping.value) return (
+    <SafeAreaView>
+      <View style={styles.noShippingContainer}>
+        <Text>Bem vindo ao Xoss :)</Text>
+        <Text>Que tal começar criando seu primeiro frete?</Text>
+
+        <Pressable style={styles.noShippingPressable} onPress={toggleFirstShippingModalVisibility}>
+          <Text style={styles.noShippingPressableText}>Criar frete</Text>
+        </Pressable>
+      </View>
+
+      <Modal  
+        visible={firstShippingModalVisibility} 
+        animationType='fade'
+        transparent={true} 
+        onRequestClose={toggleFirstShippingModalVisibility}
+      >
+        <ModalTemplate toggleModal={toggleFirstShippingModalVisibility}>
+          <NewShippingModal createShipping={createFirstShipping} />
+        </ModalTemplate>
+      </Modal>
+    </SafeAreaView>
+  )
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
@@ -157,7 +199,7 @@ export default function App() {
         <Footer toggleModal={toggleModal} balance={balance} shipping={shipping.value} />
       </View>
     </SafeAreaView>
-    );
+  );
   }
   
   const styles = StyleSheet.create({
@@ -168,5 +210,23 @@ export default function App() {
     },
     body: {
       alignItems:'center'
+    },
+    noShippingContainer: {
+      justifyContent:'center',
+      alignItems:'center',
+      height:'100%'
+    },
+    noShippingPressable: {
+      backgroundColor:'#A4243B',
+      width:'80%',
+      alignItems:'center',
+      padding:10,
+      marginTop:10,
+      borderRadius:3
+    },
+    noShippingPressableText: {
+      color:'#f2f2f2',
+      fontWeight:'300',
+      fontSize:24
     }
   })

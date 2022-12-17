@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:5
+        borderRadius:3
     },
     buttonText: {
         color:'#f2f2f2',

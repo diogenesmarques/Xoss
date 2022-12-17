@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         borderBottomColor:'#F2F2F2',
         borderLeftWidth:3,
         paddingLeft:10,
-        borderRadius:5
+        borderRadius:3
     },
     modalFooter: {
         width:'100%',
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         width:'100%',
         justifyContent:'center',
         alignItems:'center',
-        borderRadius:5
+        borderRadius:3
     },
     footerButtonText: {
         color:'#f2f2f2',
