@@ -40,6 +40,10 @@ export default function App() {
     ]});
     else setCategories({categories:JSON.parse(categories)});
 
+    const pastShippings: string | null = await AsyncStorage.getItem('pastShippings');
+    if (!pastShippings) setPastShippings([]);
+    else setPastShippings(JSON.parse(pastShippings));
+
     const expenses: string | null = await AsyncStorage.getItem('expenses');
     if (!expenses) setExpenses({expenses:[]});
     else setExpenses({expenses:JSON.parse(expenses)});
@@ -63,9 +67,11 @@ export default function App() {
   const newShipping: (value: number) => void = (value) => {
     if (value < 0 || !value) return;
 
+    setPastShippings(pastShippings.concat([shipping]));
+    
+    AsyncStorage.setItem('pastShippings', JSON.stringify(pastShippings));
+    
     setShipping({id: getShippingId(), value, startDate:new Date()});
-    expenses.expenses = [];
-    AsyncStorage.setItem('expenses', JSON.stringify([]));
     AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
   }
 
@@ -137,7 +143,6 @@ export default function App() {
   const randomColor: () => string = () => `rgb(${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)}, ${Math.floor(Math.random()*256)})`
   const toggleModal: () => void = () => setNewExpenseModalVisibility(!newExpenseModalVisibility);
   
-
   const [firstShippingModalVisibility, setFirstShippingModalVisibility] = useState<boolean>(false);
 
   const toggleFirstShippingModalVisibility: () => void = () => setFirstShippingModalVisibility(!firstShippingModalVisibility);
@@ -148,11 +153,12 @@ export default function App() {
     newShipping(value);
   } 
 
-  if (!shipping.value) return (
-    <SafeAreaView>
+ if (!shipping.value) return (
+    <SafeAreaView style={styles.noShippingBg}>
+      <StatusBar style="light"/>
       <View style={styles.noShippingContainer}>
-        <Text>Bem vindo ao Xoss :)</Text>
-        <Text>Que tal começar criando seu primeiro frete?</Text>
+        <Text style={styles.noShippingText}>Bem vindo ao Xoss :)</Text>
+        <Text style={styles.noShippingText}>Que tal começar criando seu primeiro frete?</Text>
 
         <Pressable style={styles.noShippingPressable} onPress={toggleFirstShippingModalVisibility}>
           <Text style={styles.noShippingPressableText}>Criar frete</Text>
@@ -174,13 +180,13 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <Header categories={categories} shipping={shipping} newShipping={newShipping} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
       <ScrollView>
         <View>
           <View style={styles.body}>
             {expenses.expenses.length > 0 ? <Card>
-              <ExpenseList shipping={shipping.value} expenseList={expenses} categoryList={categories}/>
+              <ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>
             </Card> : <></>}
           </View>
         </View>
@@ -206,7 +212,8 @@ export default function App() {
     container: {
       flex:1,
       justifyContent:'space-between',
-      height:'100%'
+      height:'100%',
+      backgroundColor:'#292f36'
     },
     body: {
       alignItems:'center'
@@ -217,7 +224,7 @@ export default function App() {
       height:'100%'
     },
     noShippingPressable: {
-      backgroundColor:'#A4243B',
+      backgroundColor:'#45c6bd',
       width:'80%',
       alignItems:'center',
       padding:10,
@@ -228,5 +235,11 @@ export default function App() {
       color:'#f2f2f2',
       fontWeight:'300',
       fontSize:24
+    },
+    noShippingBg: {
+      backgroundColor:'#292f36'
+    },
+    noShippingText: {
+      color:'#f2f2f2'
     }
   })

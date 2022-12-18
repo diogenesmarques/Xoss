@@ -11,10 +11,7 @@ const NewShippingModal: FC<Props> = ({ createShipping }) => {
 
     return(
         <View style={styles.modalContainer}>
-            <TextInput onChangeText={value => setNewShippingValue(value)} placeholder='Insira o valor do novo frete...' keyboardType='numeric' style={styles.input} />
-            <Text style={styles.warningText}>
-                *Nessa versão do aplicativo, criar um novo frete resultará na exclusão de todas as despesas atuais
-            </Text>
+            <TextInput placeholderTextColor='lightgrey' onChangeText={value => setNewShippingValue(value)} placeholder='Insira o valor do novo frete...' keyboardType='numeric' style={styles.input} />
             <Pressable style={styles.button} onPress={() => createShipping(parseFloat(newShippingValue))}>
                 <Text style={styles.buttonText}>Criar novo frete</Text>
             </Pressable>
@@ -28,12 +25,14 @@ const styles = StyleSheet.create({
         paddingTop:0
     },
     input: {
-        borderBottomColor:'#F2F2F2',
+        borderBottomColor:'#3e4853',
         borderBottomWidth:1,
-        paddingVertical:5
+        paddingVertical:5,
+        color:'#f2f2f2',
+        marginBottom:15,
     },
     button: {
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:3,

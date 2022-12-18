@@ -70,7 +70,8 @@ const CategoriesModal: FC<Props> = ({ toggleModal, categories, createCategory, e
 
 const styles = StyleSheet.create({
     container: {
-        height:'100%'
+        height:'100%',
+        backgroundColor:'#292f36'
     },
     header: {
         paddingHorizontal:25,
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     closeButtonText: {
         ...commonStyles.text,
         fontSize:32,
-        color:'#A4243B'
+        color:'#45c6bd'
     },
     body: {
         paddingHorizontal:25
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     category: {
         paddingVertical:15,
         borderBottomWidth:1,
-        borderBottomColor:'#F2F2F2',
+        borderBottomColor:'#3e4853',
         borderLeftWidth:3,
         paddingLeft:10,
         borderRadius:3
@@ -102,7 +103,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     footerButton: {
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
         height:'70%',
         width:'100%',
         justifyContent:'center',

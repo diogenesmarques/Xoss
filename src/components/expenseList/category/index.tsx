@@ -27,7 +27,6 @@ const Category: FC<Props> = ({category, expenseList}) => {
 
     }, [expenseList.expenses.length]);
 
-
     return(
         <View style={styles.category}>
             <View style={{...styles.color, backgroundColor:color}}>
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
         paddingVertical:2,
         flexDirection:'row',
         alignItems:'center',
-        borderBottomColor:'#d4d4d4',
+        borderBottomColor:'#4d5a67',
         borderBottomWidth:1
     },
     color: {

@@ -12,7 +12,7 @@ interface Props {
 
 const ModalTemplate: FC<Props> = ({toggleModal, children, showHeader}) => {
     return(
-        <SafeAreaView style={styles.modalBackground}>
+        <Pressable onPress={toggleModal} style={styles.modalBackground}>
             <View style={styles.modal}>
                 {showHeader === false ? 
                     <></> : 
@@ -27,7 +27,7 @@ const ModalTemplate: FC<Props> = ({toggleModal, children, showHeader}) => {
 
             </View>
            
-        </SafeAreaView>
+        </Pressable>
     );
 }
 
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     modal: {
         width:'80%',
-        backgroundColor:'white',
+        backgroundColor:'#292f36',
         borderRadius:10
     },
     modalHeader: {
@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
         alignItems:'center'
     },
     modalText: {
-        fontSize:24
+        fontSize:24,
+        color:'#f2f2f2'
     }    
 });
 

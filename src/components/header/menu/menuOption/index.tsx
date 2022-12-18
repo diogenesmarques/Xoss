@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Text, StyleSheet, Pressable } from 'react-native';
+import commonStyles from '../../../../common/styles';
 import { IMenuOption } from '../../../../utils';
 
 interface Props {
@@ -12,7 +13,7 @@ const MenuOption: FC<Props> = ({ option }) => {
 
     return(
         <Pressable style={styles.optionContainer} onPress={action}>
-                <Text style={styles.option}>{label}</Text>
+                <Text style={commonStyles.text}>{label}</Text>
         </Pressable>
     );
 }
@@ -20,12 +21,9 @@ const MenuOption: FC<Props> = ({ option }) => {
 const styles = StyleSheet.create({
     optionContainer: {
         borderBottomWidth:1,
-        borderBottomColor:'#F2F2F2',
+        borderBottomColor:'#3e4853',
         paddingVertical:15
     },
-    option: {
-        fontWeight:'300'
-    }
 });
 
 export default MenuOption;

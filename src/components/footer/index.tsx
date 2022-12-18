@@ -18,9 +18,9 @@ const Footer: FC<Props> = ({toggleModal, balance, shipping}) => {
     const [balancePercentage, setBalancePercentage] = useState<number>(0);
 
     useEffect(() => {
-        if (balance > 0) setBalanceColor('darkgreen');
-        if (balance === 0) setBalanceColor('#000');
-        if (balance < 0) setBalanceColor('darkred');
+        if (balance > 0) setBalanceColor('limegreen');
+        if (balance === 0) setBalanceColor('#EF233C');
+        if (balance < 0) setBalanceColor('red');
 
         const newBalancePercentage = calcPercentage(balance, shipping);
         setBalancePercentage(isNaN(newBalancePercentage) ? 0 : newBalancePercentage);
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     button: {
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
         height:'70%',
         width:'100%',
         justifyContent:'center',

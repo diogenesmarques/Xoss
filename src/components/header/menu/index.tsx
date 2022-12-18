@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     },
     menu: {
         marginLeft:50,
-        backgroundColor:'white',
+        backgroundColor:'#292f36',
         height:'100%'
     },
     menuContainer: {

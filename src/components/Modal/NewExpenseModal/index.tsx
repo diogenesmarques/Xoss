@@ -54,9 +54,10 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
                 <TextInput 
                     value={categoryList.categories.find(cat => cat.id === selectedCategoryId)?.name ?? ''} 
                     onPressIn={toggleSelect}
-                    style={{...styles.valueInput, borderBottomColor:selectedCategoryColor ?? '#F2F2F2'}} 
+                    style={{...styles.valueInput, borderBottomColor:selectedCategoryColor ?? '#3e4853'}} 
                     placeholder='Selecione a categoria...' 
                     editable={false}
+                    placeholderTextColor='lightgrey'
                 />
                 
             </ScrollView>
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
         padding:10
     },
     createButton: {
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
         height:'80%',
         width:'100%',
         justifyContent:'center',
@@ -110,10 +111,11 @@ const styles = StyleSheet.create({
         justifyContent:'space-between'
     },
     valueInput: {
-        borderBottomColor:'#F2F2F2',
+        borderBottomColor:'#3e4853',
         borderBottomWidth:1,
         paddingVertical:10,
-        borderRadius:2
+        borderRadius:2,
+        color:'#f2f2f2'
     }
 })
     

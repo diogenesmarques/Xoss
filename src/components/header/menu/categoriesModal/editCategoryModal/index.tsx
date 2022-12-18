@@ -31,7 +31,7 @@ const EditCategoryModal: FC<Props> = ({ category, createCategory, toggleModal, e
     return(
         <View>
             <ScrollView style={styles.container}>
-                <TextInput style={styles.input} value={catName} placeholder='Insira o nome da categoria...' onChangeText={text => setCatName(text)} />
+                <TextInput style={styles.input} placeholderTextColor='lightgrey' value={catName} placeholder='Insira o nome da categoria...' onChangeText={text => setCatName(text)} />
             </ScrollView>
             <View style={styles.footer}>
 
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
         paddingHorizontal:20
     },
     button: {
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
         justifyContent:'center',
         alignItems:'center',
         borderRadius:3,
@@ -75,13 +75,14 @@ const styles = StyleSheet.create({
         color:'#F2F2F2'
     },
     input: {
-        borderBottomColor:'#F2F2F2',
+        borderBottomColor:'#3e4853',
         borderBottomWidth:1,
         paddingVertical:10,
-        fontWeight:'300'
+        fontWeight:'300',
+        color:'#f2f2f2'
     },
     deleteButton: {
-        backgroundColor:'white',
+        backgroundColor:'transparent',
         marginVertical:5,
         borderColor:'red',
         borderWidth:1

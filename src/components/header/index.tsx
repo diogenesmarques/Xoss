@@ -66,7 +66,8 @@ const styles = StyleSheet.create({
     },
     text: {
         ...commonStyles.text,
-        fontSize:24
+        fontSize:24,
+        color:'#f2f2f2'        
     },
     buttonContainer: {
         width:'90%',
@@ -76,7 +77,6 @@ const styles = StyleSheet.create({
         alignItems:'flex-end'
     },
     button: {
-        color:'#A4243B',
         fontSize:48,
         justifyContent:'space-evenly',
         alignItems:'flex-end',
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     hambButton: {
         height:2,
         width:23,
-        backgroundColor:'#A4243B',
+        backgroundColor:'#45c6bd',
     }
 });
 
