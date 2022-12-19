@@ -1,3 +1,4 @@
+import MaskInput, { Masks } from 'react-native-mask-input';
 import { FC, useState } from 'react';
 import { Text, StyleSheet, Pressable, View, TextInput } from 'react-native';
 
@@ -7,12 +8,18 @@ interface Props {
 
 const NewShippingModal: FC<Props> = ({ createShipping }) => {
 
-    const [newShippingValue, setNewShippingValue] = useState<string>('')
+    const [newShippingValue, setNewShippingValue] = useState<string>(' ');
 
     return(
         <View style={styles.modalContainer}>
-            <TextInput placeholderTextColor='lightgrey' onChangeText={value => setNewShippingValue(value)} placeholder='Insira o valor do novo frete...' keyboardType='numeric' style={styles.input} />
-            <Pressable style={styles.button} onPress={() => createShipping(parseFloat(newShippingValue))}>
+            <MaskInput 
+                value={newShippingValue}
+                onChangeText={setNewShippingValue} 
+                mask={Masks.BRL_CURRENCY}
+                keyboardType='numeric' 
+                style={styles.input} 
+            />
+            <Pressable style={styles.button} onPress={() => createShipping(parseFloat(newShippingValue.substring(3).replace(',', '.').replace('.', '')))}>
                 <Text style={styles.buttonText}>Criar novo frete</Text>
             </Pressable>
         </View>

@@ -65,6 +65,7 @@ export default function App() {
   }
 
   const newShipping: (value: number) => void = (value) => {
+    console.log(value)
     if (value < 0 || !value) return;
 
     setPastShippings(pastShippings.concat([shipping]));

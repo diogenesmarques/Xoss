@@ -32,7 +32,13 @@ const Header: FC<Props> = ({ shipping, newShipping, categories, createCategory, 
             </View>
             <View style={styles.content}>
                 <Text style={styles.text}>Frete:</Text>
-                <Text style={styles.text}>R$ {value.toFixed(2)}</Text>
+                <Text style={styles.text}>R$ 
+                    {
+                        value.toFixed(2)
+                            .replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+                            .replace(/(.+)([.])(\d{2})/g, '$1,$3')
+                    }
+                </Text>
             </View>
 
             <Modal          

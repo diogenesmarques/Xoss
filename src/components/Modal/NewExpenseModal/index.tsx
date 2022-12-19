@@ -1,7 +1,8 @@
+import MaskInput, { Masks } from 'react-native-mask-input';
 import { FC, useState, useEffect } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import ModalTemplate from '..';
-import { ICategoryList, ICategory, moneyMask } from '../../../utils';
+import { ICategoryList, ICategory } from '../../../utils';
 import CategorySelectModal from './categorySelectModal';
 
 interface Props {
@@ -15,7 +16,7 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
     const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
     const [categorySelectModalVisibility, setCategorySelectModalVisibility] = useState<boolean>(false);    
     const [selectedCategoryColor, setSelectedCategoryColor] = useState<string | null>(null);
-    const [expenseAmount, setExpenseAmount] = useState<string>('0');
+    const [expenseAmount, setExpenseAmount] = useState<string>(' ');
 
     useEffect(() => {
         if(selectedCategoryId === null) return;
@@ -24,11 +25,6 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
         if (selectedCategory) setSelectedCategoryColor(selectedCategory.color);
 
     }, [selectedCategoryId]);
-
-    //teste
-    useEffect(() => {
-      console.log(expenseAmount)
-    }, [expenseAmount]);
 
     const toggleSelect: () => void = () => setCategorySelectModalVisibility(!categorySelectModalVisibility);
 
@@ -44,11 +40,12 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
         <View>
             <ScrollView contentContainerStyle={styles.modalBody}>
 
-                <TextInput 
+                <MaskInput 
                     style={styles.valueInput} 
                     keyboardType='numeric'
-                    value={moneyMask(expenseAmount)}
-                    onChangeText={value => setExpenseAmount(value)}
+                    value={expenseAmount}
+                    onChangeText={setExpenseAmount}
+                    mask={Masks.BRL_CURRENCY}
                 />
 
                 <TextInput 
