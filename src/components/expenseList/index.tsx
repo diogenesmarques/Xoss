@@ -22,19 +22,19 @@ const ExpenseList: FC<Props> = ({ expenseList, categoryList, shipping }) => {
     const [totalPercentage, setTotalPercentage] = useState<number>(0);
 
     useEffect(() => {
-        const newTotal: number = expenseList.expenses.reduce((prev, curr) => curr.amount + prev, 0);
+        const newTotal: number = expenseList.expenses.filter(exp => exp.shippingId === shipping.id).reduce((prev, curr) => curr.amount + prev, 0);
         const newPercentage = calcPercentage(newTotal, shipping.value);
 
         setTotal(newTotal);
         setTotalPercentage(newPercentage);
-    }, [expenseList.expenses.length, shipping.value]);
+    }, [expenseList.expenses.length, shipping]);
 
     return(
         <View>
             <ScrollView>
-                {categoryList.categories.filter(cat => expenseList.expenses.some(exp => exp.categoryId === cat.id)).map(cat => {
+                {categoryList.categories.filter(cat => expenseList.expenses.some(exp => exp.categoryId === cat.id && exp.shippingId === shipping.id)).map(cat => {
                     return(
-                      <Category category={cat} expenseList={expenseList} key={cat.id} />
+                      <Category category={cat} expenseList={{expenses: expenseList.expenses.filter(exp => exp.shippingId === shipping.id)}} key={cat.id} />
                     )
                 })}
             </ScrollView>

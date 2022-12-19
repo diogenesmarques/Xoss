@@ -49,7 +49,7 @@ export default function App() {
     else setExpenses({expenses:JSON.parse(expenses)});
 
     const shipping: string | null = await AsyncStorage.getItem('shipping');
-    if (!shipping) setShipping({value:0, startDate: new Date(), id:getShippingId()});
+    if (!shipping) setShipping({value:0, startDate: new Date(), id:1});
     else setShipping(JSON.parse(shipping));
   }
 
@@ -60,20 +60,21 @@ export default function App() {
   const [shipping, setShipping] = useState<IShipping>({id: 1, value:2000, startDate: new Date()});
   
   const getShippingId = () => {
-    if (pastShippings.length <= 0) return 1;
-    else return pastShippings[pastShippings.length - 1].id + 1
+    if (pastShippings.length <= 0) return 1; //resolver essa bosta aqui
+    else return (pastShippings[pastShippings.length - 1].id ?? 0) + 1
   }
 
   const newShipping: (value: number) => void = (value) => {
-    console.log(value)
     if (value < 0 || !value) return;
 
-    setPastShippings(pastShippings.concat([shipping]));
+    if (shipping.value > 0) setPastShippings(pastShippings.concat([shipping]));
     
     AsyncStorage.setItem('pastShippings', JSON.stringify(pastShippings));
     
-    setShipping({id: getShippingId(), value, startDate:new Date()});
-    AsyncStorage.setItem('shipping', JSON.stringify({value, startDate:new Date()}));
+    const shippingId = getShippingId();
+
+    setShipping({id: shippingId, value, startDate:new Date()});
+    AsyncStorage.setItem('shipping', JSON.stringify(shipping));
   }
 
   // -x-x-x- SHIPPING END -x-x-x- //
@@ -133,7 +134,7 @@ export default function App() {
   
   const [balance, setBalance] = useState<number>(0);
   useEffect(() => {
-    const newBalance: number = shipping.value - (expenses.expenses.reduce((prev, curr) => curr.amount + prev, 0));
+    const newBalance: number = shipping.value - (expenses.expenses.filter(exp => exp.shippingId === shipping.id).reduce((prev, curr) => curr.amount + prev, 0));
     setBalance(newBalance);
   }, [expenses.expenses.length, shipping]);
 
@@ -179,6 +180,18 @@ export default function App() {
     </SafeAreaView>
   )
 
+    const teste = () => {
+        console.log('shipping', shipping);
+        console.log('shipping id', shipping.id);
+        console.log('expenses', expenses);
+        console.log('expenses shipping id', expenses.expenses[0].shippingId);
+        console.log('past shippings', pastShippings);
+    }
+
+    const clearCache = async () => {
+        await AsyncStorage.clear();
+    }
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
@@ -186,10 +199,20 @@ export default function App() {
       <ScrollView>
         <View>
           <View style={styles.body}>
-            {expenses.expenses.length > 0 ? <Card>
+            {expenses.expenses.filter(exp => exp.shippingId === shipping.id).length > 0 ? <Card>
               <ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>
             </Card> : <></>}
           </View>
+
+          <Pressable onPress={teste}>
+            <Text>teste</Text>
+          </Pressable>
+
+          <Pressable onPress={clearCache}>
+                        <Text>bunda</Text>
+                    </Pressable>
+          
+
         </View>
         <Modal 
           visible={newExpenseModalVisibility}

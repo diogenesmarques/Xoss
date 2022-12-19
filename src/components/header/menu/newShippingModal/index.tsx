@@ -19,7 +19,7 @@ const NewShippingModal: FC<Props> = ({ createShipping }) => {
                 keyboardType='numeric' 
                 style={styles.input} 
             />
-            <Pressable style={styles.button} onPress={() => createShipping(parseFloat(newShippingValue.substring(3).replace(',', '.').replace('.', '')))}>
+            <Pressable style={styles.button} onPress={() => createShipping(parseFloat(newShippingValue.substring(3).replace('.', '').replace(',', '.')))}>
                 <Text style={styles.buttonText}>Criar novo frete</Text>
             </Pressable>
         </View>
