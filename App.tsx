@@ -60,8 +60,8 @@ export default function App() {
 	const [shipping, setShipping] = useState<IShipping>({id: 1, value:2000, startDate: new Date()});
   
 	const getShippingId = () => {
-		if (pastShippings.length <= 0) return 1; //resolver essa bosta aqui
-		else return (pastShippings[pastShippings.length - 1].id ?? 0) + 1;
+		if (pastShippings.length <= 0 && !shipping.value) return 1;
+		else return (pastShippings[pastShippings.length - 1]?.id ?? 1) + 1;
 	};
 
 	const newShipping: (value: number) => void = (value) => {
@@ -207,11 +207,6 @@ export default function App() {
 					<Pressable onPress={teste}>
 						<Text>teste</Text>
 					</Pressable>
-
-					<Pressable onPress={clearCache}>
-						<Text>bunda</Text>
-					</Pressable>
-          
 
 				</View>
 				<Modal 
