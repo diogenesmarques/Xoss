@@ -5,6 +5,7 @@ import ModalTemplate from '../../Modal';
 import MenuOption from './menuOption';
 import NewShippingModal from './newShippingModal';
 import CategoriesModal from './categoriesModal'
+import ConfirmClearDataModal from './confirmClearDataModal';
 
 interface Props {
     toggleMenu: () => void,
@@ -42,6 +43,11 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
             id:2,
             label:'Gerenciar categorias',
             action:() => toggleCategoriesModal()
+        },
+        {
+            id:3,
+            label:'Limpar dados',
+            action:() => toggleClearDataModal()
         }
     ];
 
@@ -59,6 +65,9 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
 
     const [showCategoriesModal, setShowCategoriesModal] = useState<boolean>(false);
     const toggleCategoriesModal: () => void = () => setShowCategoriesModal(!showCategoriesModal);
+
+    const [showClearDataModal, setShowClearDataModal] = useState<boolean>(false);
+    const toggleClearDataModal: () => void = () => setShowClearDataModal(!showClearDataModal);
 
     return(
         <>
@@ -90,6 +99,17 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
                 onRequestClose={toggleShippingModal}
             >
                 <CategoriesModal categories={categories} toggleModal={toggleCategoriesModal} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
+            </Modal>
+
+            <Modal
+                visible={showClearDataModal}
+                animationType='fade'
+                transparent={true} 
+                onRequestClose={toggleClearDataModal}
+            >
+                <ModalTemplate toggleModal={toggleClearDataModal}>
+                    <ConfirmClearDataModal toggleModal={toggleClearDataModal}/>
+                </ModalTemplate>
             </Modal>
 
         </>
