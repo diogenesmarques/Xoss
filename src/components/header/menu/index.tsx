@@ -1,11 +1,12 @@
 import { FC, useEffect, useState, useRef } from 'react';
 import { SafeAreaView, Pressable, StyleSheet, View, GestureResponderEvent, Animated, Modal, ScrollView, Text } from 'react-native'
-import { ICategory, ICategoryList, IMenuOption } from '../../../utils';
+import { ICategory, ICategoryList, IExpenseList, IMenuOption } from '../../../utils';
 import ModalTemplate from '../../Modal';
 import MenuOption from './menuOption';
 import NewShippingModal from './newShippingModal';
 import CategoriesModal from './categoriesModal'
 import ConfirmClearDataModal from './confirmClearDataModal';
+import ExpensesModal from './expensesModal';
 
 interface Props {
     toggleMenu: () => void,
@@ -13,19 +14,21 @@ interface Props {
     categories: ICategoryList,
     createCategory: (name: string) => void,
     editCategoryName: (category: ICategory, name: string) => void,
-    deleteCategory: (category: ICategory) => void
+    deleteCategory: (category: ICategory) => void,
+    expenses: IExpenseList,
+    deleteExpense: (id: number) => void
 }
 
 const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView)
 
-const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, editCategoryName, deleteCategory}) => {
+const Menu: FC<Props> = ({deleteExpense, toggleMenu, newShipping, categories, createCategory, editCategoryName, deleteCategory, expenses}) => {
 
     const slideAnim = useRef(new Animated.Value(500)).current;
     const slideInAnim = Animated.timing(slideAnim, { toValue:0, duration:300, useNativeDriver: true });
     const slideOutAnim = Animated.timing(slideAnim, { toValue:500, duration:300, useNativeDriver: true });
     useEffect(() => {
         slideInAnim.start();
-    }, []);    
+    }, []);
     const handleBgPress: (event: GestureResponderEvent) => void = (event) => { // @ts-ignore
         if (!(event.target.viewConfig.uiViewClassName === 'RCTView')) return;
         slideOutAnim.start();
@@ -46,6 +49,11 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
         },
         {
             id:3,
+            label:'Ver despesas',
+            action:() => toggleExpensesModal()
+        },
+        {
+            id:4,
             label:'Limpar dados',
             action:() => toggleClearDataModal()
         }
@@ -68,6 +76,9 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
 
     const [showClearDataModal, setShowClearDataModal] = useState<boolean>(false);
     const toggleClearDataModal: () => void = () => setShowClearDataModal(!showClearDataModal);
+
+    const [showExpensesModal, setShowExpensesModal] = useState<boolean>(false);
+    const toggleExpensesModal: () => void = () => setShowExpensesModal(!showExpensesModal);
 
     return(
         <>
@@ -108,8 +119,17 @@ const Menu: FC<Props> = ({toggleMenu, newShipping, categories, createCategory, e
                 onRequestClose={toggleClearDataModal}
             >
                 <ModalTemplate toggleModal={toggleClearDataModal}>
-                    <ConfirmClearDataModal toggleModal={toggleClearDataModal}/>
+                    <ConfirmClearDataModal toggleModal={toggleClearDataModal} />
                 </ModalTemplate>
+            </Modal>
+
+            <Modal
+                visible={showExpensesModal}
+                animationType='slide'
+                transparent={false} 
+                onRequestClose={toggleExpensesModal}
+            >
+               <ExpensesModal deleteExpense={deleteExpense} categories={categories} expenses={expenses} toggleModal={toggleExpensesModal}/>
             </Modal>
 
         </>

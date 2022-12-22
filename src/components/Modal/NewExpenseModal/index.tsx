@@ -30,7 +30,6 @@ const NewExpenseModal: FC<Props> = ({ categoryList, createExpense, toggleModal }
 
     const handleClick: (value:string | null, categoryId:number | null) => void = (value, categoryId) => {
         if (value === null || categoryId === null) return;
-        console.log(value);
 
         createExpense(parseFloat(value.substring(3).replaceAll('.', '').replace(',', '.')), categoryId);
         toggleModal();

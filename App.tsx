@@ -128,6 +128,14 @@ export default function App() {
 		AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
 	};
 
+    const deleteExpense: (id: number) => void = id => {
+        setExpenses(prevState => ({
+            expenses: prevState.expenses.filter(exp => exp.id !== id)
+        }));
+
+        AsyncStorage.setItem('expenses', JSON.stringify(expenses.expenses));
+    }
+
 	// -x-x-x- EXPENSES END -x-x-x- //
 
 	// -x-x-x- BALANCE -x-x-x- //
@@ -155,6 +163,10 @@ export default function App() {
 		newShipping(value);
 	}; 
 
+    const teste = () => {
+        console.log(expenses.expenses)
+    }
+
 	if (!shipping.value) return (
 		<SafeAreaView style={styles.noShippingBg}>
 			<StatusBar style="light"/>
@@ -180,22 +192,10 @@ export default function App() {
 		</SafeAreaView>
 	);
 
-	const teste = () => {
-		console.log('shipping', shipping);
-		console.log('shipping id', shipping.id);
-		console.log('expenses', expenses);
-		console.log('expenses shipping id', expenses.expenses[0].shippingId);
-		console.log('past shippings', pastShippings);
-	};
-
-	const clearCache = async () => {
-		await AsyncStorage.clear();
-	};
-
 	return (
 		<SafeAreaView style={styles.container}>
 			<StatusBar style="light" />
-			<Header categories={categories} shipping={shipping} newShipping={newShipping} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
+			<Header deleteExpense={deleteExpense} expenses={expenses} categories={categories} shipping={shipping} newShipping={newShipping} createCategory={createCategory} editCategoryName={editCategoryName} deleteCategory={deleteCategory} />
 			<ScrollView>
 				<View>
 					<View style={styles.body}>
@@ -203,11 +203,6 @@ export default function App() {
 							<ExpenseList shipping={shipping} expenseList={expenses} categoryList={categories}/>
 						</Card> : <></>}
 					</View>
-
-					<Pressable onPress={teste}>
-						<Text>teste</Text>
-					</Pressable>
-
 				</View>
 				<Modal 
 					visible={newExpenseModalVisibility}
@@ -220,6 +215,9 @@ export default function App() {
 					</ModalTemplate>
 				</Modal>
 			</ScrollView>
+            <Pressable onPress={teste}>
+                <Text>teste</Text>
+            </Pressable>
 			<View>
 				<Footer toggleModal={toggleModal} balance={balance} shipping={shipping.value} />
 			</View>

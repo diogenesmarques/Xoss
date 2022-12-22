@@ -17,7 +17,7 @@ export interface ICategoryList {
 
 export interface IExpense {
     id: number,
-    createdAt?: Date,
+    createdAt: Date,
     categoryId: number,
     amount: number,
     shippingId: number
@@ -43,3 +43,8 @@ export const moneyMask = (value: string) => {
 
   return 'R$ ' + result;
 }
+
+export const formatDate: (dateIn:Date) => string = (dateIn:Date) => {
+    const date = new Date(dateIn);
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+};
