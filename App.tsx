@@ -164,10 +164,10 @@ export default function App() {
 	}; 
 
     const teste = () => {
-        console.log(expenses.expenses)
+        console.log(AsyncStorage.getItem('shipping'))
     }
 
-	if (!shipping.value) return (
+	if (shipping.value === 0) return (
 		<SafeAreaView style={styles.noShippingBg}>
 			<StatusBar style="light"/>
 			<View style={styles.noShippingContainer}>
